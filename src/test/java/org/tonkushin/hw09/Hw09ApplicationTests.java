@@ -1,16 +1,14 @@
 package org.tonkushin.hw09;
 
 import org.junit.Test;
-import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.context.annotation.ComponentScan;
 
-@RunWith(SpringRunner.class)
 @SpringBootTest
+@ComponentScan({"org.tonkushin.hw09.service", "org.tonkushin.hw09.repository"})
 public class Hw09ApplicationTests {
 
-	@Test
-	public void contextLoads() {
-	}
-
+    @Test
+    public void contextLoads() {
+    }
 }

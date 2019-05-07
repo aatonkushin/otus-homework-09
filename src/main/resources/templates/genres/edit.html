@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::page-head">
+    <meta charset="UTF-8">
+    <title>АВТОРЫ</title>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 offset-lg-3">
+            <div class="row">
+                <div class="col-12">
+                    <h1 th:if="${item.getId() == null}">Создание жанра</h1>
+                    <h1 th:if="${item.getId() != null}">Редактирование жанра</h1>
+                    <form th:object="${item}" th:method="post" th:action="@{/genres/edit}">
+                        <!--            Код -->
+                        <input th:field="*{id}" type="hidden"/>
+                        <!--            Имя-->
+                        <div class="form-group">
+                            <label for="name">Имя</label>
+                            <input type="text" required="required" class="form-control" id="name" th:field="*{name}">
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <a th:href="@{/genres/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
+                        <a href="/genres/" class="btn btn-outline-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+            <br/>
+            <div class="row" th:if="${error != null}">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <h5 th:text="${error}"></h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

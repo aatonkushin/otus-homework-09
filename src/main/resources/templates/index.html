@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::page-head">
+    <meta charset="UTF-8">
+    <title>Библиотека</title>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css"
+          th:href="@{webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 offset-lg-3">
+            <h1>Библиотека</h1>
+            <div class="list-group">
+                <a href="/authors/" class="list-group-item list-group-item-action">Авторы</a>
+                <a href="/genres/" class="list-group-item list-group-item-action">Жанры</a>
+                <a href="/books/" class="list-group-item list-group-item-action">Книги</a>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
