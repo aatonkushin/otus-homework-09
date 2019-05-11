@@ -24,14 +24,19 @@
                         <button type="submit" class="btn btn-primary">Сохранить</button>
                         <a th:href="@{/authors/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
                         <a href="/authors/" class="btn btn-outline-secondary">Отмена</a>
+<!--                        <form th:action="@{/authors/delete(id=${item.id})}" th:method="delete" th:object="${item.id}">-->
+<!--                            <input type="hidden" name="_method" value="delete" />-->
+<!--                            <button type="submit" id="submitButton" class="btn btn-outline-danger">Удалить ALT</button>-->
+<!--                        </form>-->
                     </form>
+
                 </div>
             </div>
             <br/>
-            <div class="row" th:if="${error != null}">
+            <div class="row" th:if="${errors != null}">
                 <div class="col-12">
                     <div class="alert alert-danger">
-                        <h5 th:text="${error}"></h5>
+                        <h5 th:each="error : ${errors}" th:text="${error}"></h5>
                     </div>
                 </div>
             </div>
