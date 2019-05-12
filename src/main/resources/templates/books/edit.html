@@ -44,13 +44,8 @@
                 </div>
             </div>
             <br/>
-            <div class="row" th:if="${error != null}">
-                <div class="col-12">
-                    <div class="alert alert-danger">
-                        <h5 th:text="${error}"></h5>
-                    </div>
-                </div>
-            </div>
+            <!--            Ошибки-->
+            <div th:replace="layout::errors-div(${errors})"></div>
         </div>
     </div>
 </div>

@@ -17,6 +17,11 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Book save(Book item) {
+        //Из модели вместо null может прийти пустая строка и тогда MONGO не генерит ID,
+        //в этом случае принудительно устанавливаем ID в null
+        if (item.getId() != null && item.getId().isEmpty())
+            item.setId(null);
+
         return repository.save(item);
     }
 

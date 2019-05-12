@@ -1,6 +1,7 @@
 package org.tonkushin.hw09.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,8 @@ import org.tonkushin.hw09.service.BookService;
 import org.tonkushin.hw09.service.GenreService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 @Controller
 public class BookController {
@@ -46,7 +49,9 @@ public class BookController {
                 item = service.findById(id);
             } catch (BookNotFoundException e) {
                 e.printStackTrace();
-                model.addAttribute("error", String.format("Книга с кодом %s не найдена", id));
+                model.addAttribute("errors", new ArrayList<String>() {{
+                    add(String.format("Книга с кодом %s не найдена", id));
+                }});
             }
         }
         model.addAttribute("item", item);
@@ -59,13 +64,10 @@ public class BookController {
     public String edit(Model model, @Valid Book item, BindingResult bindingResult) {
         // Проверяем ошибки.
         if (bindingResult.hasErrors()) {
-            StringBuilder error = new StringBuilder();
-            // устанавливаем сообщения об ошибках
-            for (FieldError fe : bindingResult.getFieldErrors()) {
-                error.append(fe.getDefaultMessage()).append("<br/>");
-            }
+            model.addAttribute("errors",
+                    bindingResult.getFieldErrors()
+                            .stream().map(DefaultMessageSourceResolvable::getDefaultMessage).collect(Collectors.toList()));
 
-            model.addAttribute("error", error.toString());
             model.addAttribute("item", item);
             model.addAttribute("authors", authorService.findAll());
             model.addAttribute("genres", genreService.findAll());
@@ -74,14 +76,11 @@ public class BookController {
         }
 
         try {
-            //Из модели вместо null может прийти пустая строка и тогда MONGO не генерит ID,
-            //в этом случае принудительно устанавливаем ID в null
-            if (item.getId() != null && item.getId().isEmpty())
-                item.setId(null);
-
             service.save(item);
         } catch (Exception e) {
-            model.addAttribute("error", e.getMessage());
+            model.addAttribute("errors", new ArrayList<String>() {{
+                add(e.getMessage());
+            }});
             model.addAttribute("item", item);
             model.addAttribute("authors", authorService.findAll());
             model.addAttribute("genres", genreService.findAll());
