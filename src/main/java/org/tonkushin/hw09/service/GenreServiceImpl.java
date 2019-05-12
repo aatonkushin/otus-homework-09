@@ -24,6 +24,11 @@ public class GenreServiceImpl implements GenreService {
 
     @Override
     public Genre save(Genre item) {
+        //Из модели вместо null может прийти пустая строка и тогда MONGO не генерит ID,
+        //в этом случае принудительно устанавливаем ID в null
+        if (item.getId() != null && item.getId().isEmpty())
+            item.setId(null);
+
         return repository.save(item);
     }
 

@@ -5,4 +5,11 @@
     <title>Библиотека</title>
     <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css" th:href="@{/webjars/bootstrap/4.3.1/css/bootstrap.min.css}">
 </head>
+<div class="row" th:if="${errors != null}" th:fragment="errors-div (errors)">
+    <div class="col-12">
+        <div class="alert alert-danger">
+            <h5 th:each="error : ${errors}" th:text="${error}"></h5>
+        </div>
+    </div>
+</div>
 </html>
