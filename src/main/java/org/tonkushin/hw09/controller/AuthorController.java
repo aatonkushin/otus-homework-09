@@ -78,10 +78,17 @@ public class AuthorController {
         return "redirect:/authors/";
     }
 
-//    @DeleteMapping("/authors/delete")
-//    @RequestMapping(value = "/authors/delete", method = RequestMethod.DELETE)
     @GetMapping("/authors/delete")
     public String delete(Model model, @RequestParam(value = "id") String id) {
+        return deleteAuthor(model, id);
+    }
+    @DeleteMapping("/authors/delete")
+    public String deleteAlt(Model model, @RequestParam(value = "id") String id) {
+        return deleteAuthor(model, id);
+    }
+
+    //Удаляет автора из БД
+    private String deleteAuthor(Model model, @RequestParam("id") String id) {
         try {
             service.deleteById(id);
             return "redirect:/authors/";
