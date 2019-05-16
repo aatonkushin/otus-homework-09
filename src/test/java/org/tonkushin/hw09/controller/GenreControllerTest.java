@@ -1,7 +1,6 @@
 package org.tonkushin.hw09.controller;
 
 import org.assertj.core.api.Assertions;
-import org.hamcrest.Matcher;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -9,7 +8,6 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -20,7 +18,6 @@ import org.tonkushin.hw09.service.GenreService;
 import java.util.ArrayList;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -44,7 +41,7 @@ class GenreControllerTest {
     void shouldContainGenres() throws Exception {
 
         //Для изучения работы @MockBean
-        Mockito.when(genreService.findAll()).thenReturn(new ArrayList<Genre>(){{
+        Mockito.when(genreService.findAll()).thenReturn(new ArrayList<Genre>() {{
             add(new Genre(TEST_GENRE));
         }});
 
