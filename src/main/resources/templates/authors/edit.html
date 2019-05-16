@@ -24,11 +24,11 @@
                         <button type="submit" class="btn btn-primary">Сохранить</button>
                         <a th:href="@{/authors/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
                         <a href="/authors/" class="btn btn-outline-secondary">Отмена</a>
-                        <form th:action="@{/authors/delete(id=${item.id})}" th:method="delete" th:object="${item.id}">
-                            <button type="submit" id="submitButton" class="btn btn-outline-danger">Удалить ALT</button>
-                        </form>
                     </form>
-
+                    <br/>
+                    <form th:action="@{/authors/delete(id=${item.id})}" th:method="post" th:if="${item.id != null}">
+                        <button type="submit" id="submitButton" class="btn btn-outline-danger">Удалить POST</button>
+                    </form>
                 </div>
             </div>
             <br/>

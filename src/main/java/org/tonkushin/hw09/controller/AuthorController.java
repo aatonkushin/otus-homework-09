@@ -82,7 +82,8 @@ public class AuthorController {
     public String delete(Model model, @RequestParam(value = "id") String id) {
         return deleteAuthor(model, id);
     }
-    @DeleteMapping("/authors/delete")
+
+    @PostMapping("/authors/delete")
     public String deleteAlt(Model model, @RequestParam(value = "id") String id) {
         return deleteAuthor(model, id);
     }
