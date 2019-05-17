@@ -19,7 +19,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(AuthorController.class)
-class AuthorControllerTest {
+public class AuthorControllerTest {
     @Autowired
     private MockMvc mvc;
 
