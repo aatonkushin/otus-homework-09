@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="layout::page-head">
+    <meta charset="UTF-8">
+    <title>АВТОРЫ</title>
+    <link rel="stylesheet" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+    <div class="row">
+        <div class="col-sm-12 col-lg-6 offset-lg-3">
+            <div class="row">
+                <div class="col-12">
+                    <h1 th:if="${item.getId() == null}">Создание книги</h1>
+                    <h1 th:if="${item.getId() != null}">Редактирование книги</h1>
+                    <form th:object="${item}" th:method="post" th:action="@{/books/edit}">
+                        <!--            Код -->
+                        <input th:field="*{id}" type="hidden"/>
+                        <!--            Имя-->
+                        <div class="form-group">
+                            <label for="name">Название</label>
+                            <input type="text" required="required" class="form-control" id="name" th:field="*{name}">
+                        </div>
+                        <!--            Автор-->
+                        <div class="form-group">
+                            <label for="name">Автор</label>
+                            <select class="form-control" th:field="*{author}" required="required">
+                                <option th:value="null"></option>
+                                <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+                            </select>
+                        </div>
+                        <!--                Жанр-->
+                        <div class="form-group">
+                            <label for="name">Жанр</label>
+                            <select class="form-control" th:field="*{genre}" required="required">
+                                <option th:value="null"></option>
+                                <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Сохранить</button>
+                        <a th:href="@{/books/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
+                        <a href="/books/" class="btn btn-outline-secondary">Отмена</a>
+                    </form>
+                </div>
+            </div>
+            <br/>
+            <!--            Ошибки-->
+            <div th:replace="layout::errors-div(${errors})"></div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
