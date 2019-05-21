@@ -33,26 +33,25 @@ public class AuthorControllerTest {
     private static final String CREATE_AUTHOR = "Создание автора";
 
     @Test
-    @DisplayName("Должен вернуть страницу с текстом АВТОРЫ и запись Тестовый автор")
+    @DisplayName("Должен вернуть страницу с текстом АВТОРЫ")
     void shouldContainAuthors() throws Exception {
         //Для изучения работы @MockBean
         Mockito.when(authorService.findAll()).thenReturn(new ArrayList<Author>() {{
             add(new Author(TEST_AUTHOR));
         }});
 
-        MvcResult mvcResult = mvc.perform(get("/authors/").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(AuthorController.AUTHORS_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
 
         Assertions.assertThat(content).contains(AUTHORS);
-        Assertions.assertThat(content).contains(TEST_AUTHOR);
     }
 
     @Test
     @DisplayName("Должен вернуть страницу с текстом Создание автора")
     void shouldContainEditAuthor() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/authors/edit").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(AuthorController.EDIT_AUTHORS_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();

@@ -20,13 +20,19 @@ public class AuthorServiceImpl implements AuthorService {
     }
 
     @Override
-    public Author save(Author item) {
+    public Author save(Author item) throws AuthorNotFoundException {
         //Из модели вместо null может прийти пустая строка и тогда MONGO не генерит ID,
         //в этом случае принудительно устанавливаем ID в null
-        if (item.getId() != null && item.getId().isEmpty())
+        if (item.getId() == null || item.getId().isEmpty()) {
+            //Новая запись
             item.setId(null);
-
-        return repository.save(item);
+            return repository.save(item);
+        } else {
+            //Редактирование записи
+            Author oldItem = repository.findById(item.getId()).orElseThrow(AuthorNotFoundException::new);
+            oldItem.setName(item.getName());
+            return repository.save(oldItem);
+        }
     }
 
     @Override

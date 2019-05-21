@@ -11,43 +11,151 @@
         <div class="col-sm-12 col-lg-6 offset-lg-3">
             <div class="row">
                 <div class="col-12">
-                    <h1 th:if="${item.getId() == null}">Создание книги</h1>
-                    <h1 th:if="${item.getId() != null}">Редактирование книги</h1>
-                    <form th:object="${item}" th:method="post" th:action="@{/books/edit}">
-                        <!--            Код -->
-                        <input th:field="*{id}" type="hidden"/>
+                    <h1 id="newBookTitle" style="display: none">Создание книги</h1>
+                    <h1 id="editBookTitle" style="display: none">Редактирование книги</h1>
+                    <form>
                         <!--            Имя-->
                         <div class="form-group">
                             <label for="name">Название</label>
-                            <input type="text" required="required" class="form-control" id="name" th:field="*{name}">
+                            <input type="text" required="required" class="form-control" id="name">
                         </div>
                         <!--            Автор-->
                         <div class="form-group">
-                            <label for="name">Автор</label>
-                            <select class="form-control" th:field="*{author}" required="required">
+                            <label for="selectAuthors">Автор</label>
+                            <select class="form-control" required="required" id="selectAuthors">
                                 <option th:value="null"></option>
-                                <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
                             </select>
                         </div>
                         <!--                Жанр-->
                         <div class="form-group">
-                            <label for="name">Жанр</label>
-                            <select class="form-control" th:field="*{genre}" required="required">
+                            <label for="selectGenres">Жанр</label>
+                            <select class="form-control" required="required" id="selectGenres">
                                 <option th:value="null"></option>
-                                <option th:each="genre : ${genres}" th:value="${genre.id}" th:text="${genre.name}"></option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                        <a th:href="@{/books/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
+                        <button type="button" class="btn btn-primary" id="btnSave">Сохранить</button>
+                        <a class="btn btn-outline-danger" id="btnDelete">Удалить</a>
                         <a href="/books/" class="btn btn-outline-secondary">Отмена</a>
                     </form>
                 </div>
             </div>
             <br/>
-            <!--            Ошибки-->
-            <div th:replace="layout::errors-div(${errors})"></div>
+            <!--Ошибки-->
+            <div class="row" id="errorsRow" style="display: none;">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <h5 id="errors"></h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
+<script>
+    let item = {
+        id: "",
+        name: "",
+        author: {id: "", name: ""},
+        genre: {id: "", name: ""}
+    };
+    $(document).ready(function () {
+        //Загружает список авторов
+        $.get("/api/authors/", function (data) {
+            data.forEach(item => {
+                    let opt = "<option value='" + item.id + "'>" + item.name + "</option>";
+                    $("#selectAuthors").append(opt);
+                }
+            );
+        });
+
+        //Загружает список жанров
+        $.get("/api/genres/", function (data) {
+            data.forEach(item => {
+                    let opt = "<option value='" + item.id + "'>" + item.name + "</option>";
+                    $("#selectGenres").append(opt);
+                }
+            );
+        });
+
+        //Ищем параметры в строке запроса
+        let searchParams = new URLSearchParams(window.location.search);
+
+        if (searchParams.has('id')) {
+            //Редактирование существующего жанра
+
+            let param = searchParams.get('id');
+
+            //Заголовок страницы
+            $('#editBookTitle').show();
+            $('#newBookTitle').hide();
+            $('#btnDelete').show();
+
+            //Загружаем редактируюмую книгу
+            $.get("/api/books/" + param, function (data) {
+                item = data;
+                $('#name').val(item.name);  //название
+                $("#selectAuthors").val(item.author.id); //автор
+                $("#selectGenres").val(item.genre.id);   //жанр
+            }).fail((err) => {
+                $("#errorsRow").show();
+                $("#errors").text(err.responseText);
+            });
+        } else {
+            //Создание нового жанра
+
+            //Заголовок страницы
+            $('#editBookTitle').hide();
+            $('#newBookTitle').show();
+            $('#btnDelete').hide();
+
+            $('#name').val(item.name);
+        }
+    });
+
+    //Сохранение книги
+    $("#btnSave").click(() => {
+        item.name = $('#name').val();
+
+        item.author.id = $("#selectAuthors").val();
+        item.author.name = $("#selectAuthors option:selected").text();
+
+        item.genre.id = $("#selectGenres").val();
+        item.genre.name = $("#selectGenres option:selected").text();
+
+        let reqType;
+        let url;
+
+        //Создание нового
+        if (item.id === "") {
+            reqType = 'POST';
+            url = "/api/books/";
+        } else {
+            //Обновление существующего
+            reqType = 'PUT';
+            url = "/api/books/" + item.id;
+        }
+
+        //Отправляем запрос на сохранение
+        $.ajax(url, {
+            data: JSON.stringify(item),
+            contentType: 'application/json',
+            type: reqType,
+        }).done(() => {
+            window.location.replace("/books/");
+        });
+    });
+
+    //Удаление книги
+    $("#btnDelete").click(() => {
+        $.ajax("/api/books/" + item.id, {
+            type: 'DELETE',
+        }).done(() => {
+            window.location.replace("/books/");
+        }).fail((err) => {
+            $("#errorsRow").show();
+            $("#errors").text(err.responseText);
+        });
+    });
+</script>
 </html>

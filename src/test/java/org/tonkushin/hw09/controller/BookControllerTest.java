@@ -39,7 +39,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("Должен вернуть страницу с текстом КНИГИ")
     void shouldReturnBooks() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/books/").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(BookController.BOOKS_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
@@ -50,7 +50,7 @@ public class BookControllerTest {
     @Test
     @DisplayName("Должен вернуть страницу с текстом Создание книги")
     void shouldReturnCreateBook() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/books/edit").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(BookController.EDIT_BOOK_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();

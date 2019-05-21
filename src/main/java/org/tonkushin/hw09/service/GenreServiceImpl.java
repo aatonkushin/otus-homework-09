@@ -23,13 +23,17 @@ public class GenreServiceImpl implements GenreService {
 
 
     @Override
-    public Genre save(Genre item) {
+    public Genre save(Genre item) throws GenreNotFoundException {
         //Из модели вместо null может прийти пустая строка и тогда MONGO не генерит ID,
         //в этом случае принудительно устанавливаем ID в null
-        if (item.getId() != null && item.getId().isEmpty())
+        if (item.getId() == null || item.getId().isEmpty()) {
             item.setId(null);
-
-        return repository.save(item);
+            return repository.save(item);
+        } else {
+            Genre oldItem = repository.findById(item.getId()).orElseThrow(GenreNotFoundException::new);
+            oldItem.setName(item.getName());
+            return repository.save(item);
+        }
     }
 
     @Override

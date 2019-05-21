@@ -25,7 +25,7 @@ public class AuthorServiceImplTest {
 
     @Test
     @DisplayName("Проверка метода сохранения записи в БД")
-    void save() {
+    void save() throws AuthorNotFoundException {
         AuthorServiceImpl service = new AuthorServiceImpl(repository, bookRepository);
         Author itemToSave = new Author("Пушкин");
 

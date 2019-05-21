@@ -28,13 +28,6 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="item : ${items}">
-                            <td>
-                                <a th:href="@{/books/edit(id=${item.id})}" th:text="${item.name}"></a>
-                            </td>
-                            <td th:text="${item.author?.name}"></td>
-                            <td th:text="${item.genre?.name}"></td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -43,4 +36,20 @@
     </div>
 </div>
 </body>
+<script>
+    $(document).ready(function () {
+        //Загружает список книг
+        $.get("/api/books/", function (data) {
+            data.forEach(item => {
+                    let row = "<tr>" +
+                        "<td><a href='/books/edit?id=" + item.id + "'>" + item.name + "</a></td>" +
+                        "<td>"+item.author.name+"</td>" +
+                        "<td>"+item.genre.name+"</td>" +
+                        "</tr>";
+                    $("table tbody").append(row);
+                }
+            );
+        });
+    });
+</script>
 </html>

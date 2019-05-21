@@ -7,7 +7,7 @@ import org.tonkushin.hw09.model.Author;
 import java.util.List;
 
 public interface AuthorService {
-    Author save(Author item);
+    Author save(Author item) throws AuthorNotFoundException;
 
     Author findById(String id) throws AuthorNotFoundException;
 
