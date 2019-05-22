@@ -34,7 +34,7 @@ public class GenreControllerTest {
     private static final String CREATE_GENRE = "Создание жанра";
 
     @Test
-    @DisplayName("Должен вернуть страницу с текстом ЖАНРЫ и запись Тестовый жанр")
+    @DisplayName("Должен вернуть страницу с текстом ЖАНРЫ")
     void shouldContainGenres() throws Exception {
 
         //Для изучения работы @MockBean
@@ -42,19 +42,18 @@ public class GenreControllerTest {
             add(new Genre(TEST_GENRE));
         }});
 
-        MvcResult mvcResult = mvc.perform(get("/genres/").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(GenreController.GENRES_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();
 
         Assertions.assertThat(content).contains(GENRES);
-        Assertions.assertThat(content).contains(TEST_GENRE);
     }
 
     @Test
     @DisplayName("Должен вернуть страницу с текстом Создание жанра")
     void shouldReturnCreateGenre() throws Exception {
-        MvcResult mvcResult = mvc.perform(get("/genres/edit").contentType(MediaType.TEXT_HTML))
+        MvcResult mvcResult = mvc.perform(get(GenreController.EDIT_GENRES_URL).contentType(MediaType.TEXT_HTML))
                 .andExpect(status().isOk()).andReturn();
 
         String content = mvcResult.getResponse().getContentAsString();

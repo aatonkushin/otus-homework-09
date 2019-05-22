@@ -19,18 +19,13 @@
             <br/>
             <div class="row">
                 <div class="col-12">
-                    <table class="table table-hover">
+                    <table class="table table-hover" id="authorsTable">
                         <thead>
                         <tr>
                             <th>Имя</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="item : ${items}">
-                            <td>
-                                <a th:href="@{/authors/edit(id=${item.id})}" th:text="${item.name}"></a>
-                            </td>
-                        </tr>
                         </tbody>
                     </table>
                 </div>
@@ -39,4 +34,16 @@
     </div>
 </div>
 </body>
+<script>
+    $(document).ready(function () {
+        //Загружает список авторов
+        $.get("/api/authors/", function (data) {
+            data.forEach(item => {
+                    let row = "<tr><td><a href='/authors/edit?id=" + item.id + "'>" + item.name + "</a></td></tr>";
+                    $("table tbody").append(row);
+                }
+            );
+        });
+    });
+</script>
 </html>

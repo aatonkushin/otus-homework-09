@@ -7,7 +7,7 @@ import org.tonkushin.hw09.model.Genre;
 import java.util.List;
 
 public interface GenreService {
-    Genre save(Genre item);
+    Genre save(Genre item) throws GenreNotFoundException;
 
     Genre findById(String id) throws GenreNotFoundException;
 

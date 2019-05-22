@@ -11,31 +11,111 @@
         <div class="col-sm-12 col-lg-6 offset-lg-3">
             <div class="row">
                 <div class="col-12">
-                    <h1 th:if="${item.getId() == null}">Создание автора</h1>
-                    <h1 th:if="${item.getId() != null}">Редактирование автора</h1>
-                    <form th:object="${item}" th:method="post" th:action="@{/authors/edit}">
-                        <!--            Код -->
-                        <input th:field="*{id}" type="hidden"/>
-                        <!--            Имя-->
+                    <h1 id="newAuthorTitle" style="display: none">Создание автора</h1>
+                    <h1 id="editAuthorTitle" style="display: none">Редактирование автора</h1>
+                    <form>
+                        <!--Имя-->
                         <div class="form-group">
                             <label for="name">Имя</label>
-                            <input type="text" required="required" class="form-control" id="name" th:field="*{name}">
+                            <input type="text" required="required" class="form-control" id="name">
                         </div>
-                        <button type="submit" class="btn btn-primary">Сохранить</button>
-                        <a th:href="@{/authors/delete(id=*{id})}" class="btn btn-outline-danger" th:if="*{id != null}">Удалить</a>
+                        <button class="btn btn-primary" id="btnSave" type="button">Сохранить</button>
+                        <a class="btn btn-outline-danger" id="btnDelete">Удалить</a>
                         <a href="/authors/" class="btn btn-outline-secondary">Отмена</a>
                     </form>
                     <br/>
-                    <form th:action="@{/authors/delete(id=${item.id})}" th:method="post" th:if="${item.id != null}">
-                        <button type="submit" id="submitButton" class="btn btn-outline-danger">Удалить POST</button>
-                    </form>
                 </div>
             </div>
             <br/>
-            <!--            Ошибки-->
-            <div th:replace="layout::errors-div(${errors})"></div>
+            <!--Ошибки-->
+            <div class="row" id="errorsRow" style="display: none;">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        <h5 id="errors"></h5>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 </body>
+<script>
+    //Создаваемый / редактируемый элемент
+    let item = {id: '', name: ''};
+
+    $(document).ready(function () {
+        //Ищем параметры в строке запроса
+        let searchParams = new URLSearchParams(window.location.search);
+
+        if (searchParams.has('id')) {
+            //Редактирование существующего автора
+
+            let param = searchParams.get('id');
+
+            //Заголовок страницы
+            $('#editAuthorTitle').show();
+            $('#newAuthorTitle').hide();
+            $('#btnDelete').show();
+
+            //Загружаем редактируемого автора
+            $.get("/api/authors/" + param, function (data) {
+                item = data;
+                $('#name').val(item.name);
+            }).fail((err)=>{
+                $("#errorsRow").show();
+                $("#errors").text(err.responseText);
+            });
+        } else {
+            //Создание нового автора
+
+            //Заголовок страницы
+            $('#editAuthorTitle').hide();
+            $('#newAuthorTitle').show();
+            $('#btnDelete').hide();
+
+            $('#name').val(item.name);
+        }
+    });
+
+    /**
+     * Сохранение автора
+     */
+    $("#btnSave").click(() => {
+        item.name = $('#name').val();
+
+        let reqType;
+        let url;
+
+        //Создание нового
+        if (item.id === "") {
+            reqType = 'POST';
+            url = "/api/authors/";
+        } else {
+            //Обновление существующего
+            reqType = 'PUT';
+            url = "/api/authors/" + item.id;
+        }
+
+        //Отправляем запрос на сохранение
+        $.ajax(url, {
+            data: JSON.stringify(item),
+            contentType: 'application/json',
+            type: reqType,
+        }).done(() => {
+            window.location.replace("/authors/");
+        });
+    });
+
+    //Удаление автора
+    $("#btnDelete").click(() => {
+        $.ajax("/api/authors/" + item.id, {
+            type: 'DELETE',
+        }).done(() => {
+            window.location.replace("/authors/");
+        }).fail((err)=>{
+            $("#errorsRow").show();
+            $("#errors").text(err.responseText);
+        });
+    });
+</script>
 </html>
