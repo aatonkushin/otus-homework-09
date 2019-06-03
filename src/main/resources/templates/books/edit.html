@@ -61,7 +61,7 @@
     };
     $(document).ready(function () {
         //Загружает список авторов
-        $.get("/api/authors/", function (data) {
+        $.get("/api/v1/authors/", function (data) {
             data.forEach(item => {
                     let opt = "<option value='" + item.id + "'>" + item.name + "</option>";
                     $("#selectAuthors").append(opt);
@@ -70,7 +70,7 @@
         });
 
         //Загружает список жанров
-        $.get("/api/genres/", function (data) {
+        $.get("/api/v1/genres/", function (data) {
             data.forEach(item => {
                     let opt = "<option value='" + item.id + "'>" + item.name + "</option>";
                     $("#selectGenres").append(opt);
@@ -92,7 +92,7 @@
             $('#btnDelete').show();
 
             //Загружаем редактируюмую книгу
-            $.get("/api/books/" + param, function (data) {
+            $.get("/api/v1/books/" + param, function (data) {
                 item = data;
                 $('#name').val(item.name);  //название
                 $("#selectAuthors").val(item.author.id); //автор
@@ -129,11 +129,12 @@
         //Создание нового
         if (item.id === "") {
             reqType = 'POST';
-            url = "/api/books/";
+            url = "/api/v1/books/";
+            item.id = null;
         } else {
             //Обновление существующего
             reqType = 'PUT';
-            url = "/api/books/" + item.id;
+            url = "/api/v1/books/" + item.id;
         }
 
         //Отправляем запрос на сохранение
@@ -148,7 +149,7 @@
 
     //Удаление книги
     $("#btnDelete").click(() => {
-        $.ajax("/api/books/" + item.id, {
+        $.ajax("/api/v1/books/" + item.id, {
             type: 'DELETE',
         }).done(() => {
             window.location.replace("/books/");

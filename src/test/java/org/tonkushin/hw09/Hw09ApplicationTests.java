@@ -7,14 +7,12 @@ import org.junit.runner.RunWith;
 import org.tonkushin.hw09.controller.AuthorControllerTest;
 import org.tonkushin.hw09.controller.BookControllerTest;
 import org.tonkushin.hw09.controller.GenreControllerTest;
-import org.tonkushin.hw09.controller.rest.AuthorRestControllerTest;
-import org.tonkushin.hw09.controller.rest.BookRestControllerTest;
-import org.tonkushin.hw09.controller.rest.GenreRestControllerTest;
+import org.tonkushin.hw09.controller.rest.*;
 
 @RunWith(JUnitPlatform.class)
-@SelectClasses({AuthorControllerTest.class, AuthorRestControllerTest.class,
-        GenreControllerTest.class, GenreRestControllerTest.class,
-        BookControllerTest.class, BookRestControllerTest.class})
+@SelectClasses({AuthorControllerTest.class, AuthorRestControllerTest.class, AuthorReactRestControllerTest.class,
+        GenreControllerTest.class, GenreRestControllerTest.class, GenreReactRestControllerTest.class,
+        BookControllerTest.class, BookRestControllerTest.class, BookReactRestControllerTest.class})
 public class Hw09ApplicationTests {
 
     @Test

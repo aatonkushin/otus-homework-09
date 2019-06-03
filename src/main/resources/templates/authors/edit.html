@@ -42,6 +42,7 @@
 <script>
     //Создаваемый / редактируемый элемент
     let item = {id: '', name: ''};
+    let api_authors_url = "/api/v1/authors/";
 
     $(document).ready(function () {
         //Ищем параметры в строке запроса
@@ -58,7 +59,7 @@
             $('#btnDelete').show();
 
             //Загружаем редактируемого автора
-            $.get("/api/authors/" + param, function (data) {
+            $.get(api_authors_url + param, function (data) {
                 item = data;
                 $('#name').val(item.name);
             }).fail((err)=>{
@@ -89,11 +90,12 @@
         //Создание нового
         if (item.id === "") {
             reqType = 'POST';
-            url = "/api/authors/";
+            url = api_authors_url;
+            item.id = null;
         } else {
             //Обновление существующего
             reqType = 'PUT';
-            url = "/api/authors/" + item.id;
+            url = api_authors_url + item.id;
         }
 
         //Отправляем запрос на сохранение
@@ -108,7 +110,7 @@
 
     //Удаление автора
     $("#btnDelete").click(() => {
-        $.ajax("/api/authors/" + item.id, {
+        $.ajax(api_authors_url + item.id, {
             type: 'DELETE',
         }).done(() => {
             window.location.replace("/authors/");
