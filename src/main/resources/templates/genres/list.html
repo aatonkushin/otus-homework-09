@@ -37,7 +37,7 @@
 <script>
     $(document).ready(function () {
         //Загружает список жанров
-        $.get("/api/genres/", function (data) {
+        $.get("/api/v1/genres/", function (data) {
             data.forEach(item => {
                     let row = "<tr><td><a href='/genres/edit?id=" + item.id + "'>" + item.name + "</a></td></tr>";
                     $("table tbody").append(row);

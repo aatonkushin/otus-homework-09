@@ -39,7 +39,7 @@
 <script>
     $(document).ready(function () {
         //Загружает список книг
-        $.get("/api/books/", function (data) {
+        $.get("/api/v1/books/", function (data) {
             data.forEach(item => {
                     let row = "<tr>" +
                         "<td><a href='/books/edit?id=" + item.id + "'>" + item.name + "</a></td>" +
